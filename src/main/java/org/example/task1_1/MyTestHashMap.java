@@ -8,7 +8,7 @@ public class MyTestHashMap {
         map.put("A", 10);
         map.put("B", 20);
         map.put("C", 30);
-        map.print(); // 3 элемента
+        map.print(); //3 элемента
 
         System.out.println("GET 'B': " + map.get("B")); // 20
         System.out.println("GET 'D': " + map.get("D")); // null

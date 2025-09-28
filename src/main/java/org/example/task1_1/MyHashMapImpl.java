@@ -47,7 +47,6 @@ public class MyHashMapImpl<K, V> implements MyHashMap<K, V> {
 
     @SuppressWarnings("unchecked")
     public MyHashMapImpl(int capacity) {
-        // Создание массива списков.
         this.table = new LinkedList[capacity];
         this.size = 0;
     }
