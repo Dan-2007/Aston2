@@ -49,7 +49,7 @@ public class UserDAOImpl implements UserDAO {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("from User", User.class).list();
         } catch (Exception e) {
-            logger.error("Error fetching all users", e);
+            logger.error("Error finding all users", e);
             throw e;
         }
     }
