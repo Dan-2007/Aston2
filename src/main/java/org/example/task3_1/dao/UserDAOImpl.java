@@ -1,7 +1,7 @@
-package org.example.task2_1.dao;
+package org.example.task3_1.dao;
 
-import org.example.task2_1.model.User;
-import org.example.task2_1.util.HibernateUtil;
+import org.example.task3_1.model.User;
+import org.example.task3_1.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
