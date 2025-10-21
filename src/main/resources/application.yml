@@ -1,0 +1,24 @@
+# Spring Boot application configuration
+# Default profile: PostgreSQL datasource + JPA settings
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/userdb
+    username: dbuser
+    password: dbuser
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update      # use 'validate' or 'none' in production if schema is managed separately
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.example.task4_1: DEBUG
