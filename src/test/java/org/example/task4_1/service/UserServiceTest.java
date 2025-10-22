@@ -26,19 +26,16 @@ import static org.mockito.Mockito.*;
 public class UserServiceTest {
 
     @Mock
-    private UserRepository userRepository; // <-- мок репозитория, не DAO
+    private UserRepository userRepository;
 
     @InjectMocks
-    private UserService userService; // будет создан через @InjectMocks
+    private UserService userService;
 
     @Captor
     private ArgumentCaptor<User> userCaptor;
 
     @BeforeEach
     void setUp() {
-        // не нужно вручную создавать userService, @InjectMocks делает это автоматически,
-        // но если хотите явный конструктор, можно:
-        // userService = new UserService(userRepository);
     }
 
     @Test
@@ -131,7 +128,7 @@ public class UserServiceTest {
         saved.setName("New");
         saved.setEmail("old@example.com");
 
-        // при обновлении сервис сначала делает findById(id), затем save(existing)
+
         when(userRepository.findById(id)).thenReturn(Optional.of(existing));
         when(userRepository.save(any(User.class))).thenReturn(saved);
 

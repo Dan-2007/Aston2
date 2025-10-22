@@ -12,17 +12,11 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Сервисный слой использует Spring Data JPA репозиторий.
- *
- * Методы возвращают/принимают DTO, преобразование между DTO и Entity происходит внутри сервиса.
- */
 @Service
 @Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
 
-    // Внедрение репозитория (используется Spring). Наличие конструктора облегчает тестирование.
     public UserService(UserRepository userRepository) {
         this.userRepository = Objects.requireNonNull(userRepository);
     }
@@ -57,7 +51,6 @@ public class UserService {
     @Transactional
     public UserDTO createUser(UserDTO dto) {
         User user = fromDto(dto);
-        // при создании, если createdAt == null, установить текущее время
         if (user.getCreatedAt() == null) {
             user.setCreatedAt(java.time.LocalDateTime.now());
         }
@@ -68,7 +61,6 @@ public class UserService {
     @Transactional
     public Optional<UserDTO> updateUser(@PathVariable Long id, UserDTO dto) {
         return userRepository.findById(id).map(existing -> {
-            // обновляем поля
             if (dto.getName() != null) existing.setName(dto.getName());
             if (dto.getEmail() != null) existing.setEmail(dto.getEmail());
             if (dto.getAge() != null) existing.setAge(dto.getAge());
