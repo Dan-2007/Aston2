@@ -13,7 +13,28 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  kafka:
+    consumer:
+      group-id: notification-service-group
+      auto-offset-reset: earliest
+    listener:
+      missing-topics-fatal: false
 
+
+  mail:
+    host: localhost
+    port: 25
+    username:
+    password:
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+
+notification:
+  topic: users.events
 server:
   port: 8080
 

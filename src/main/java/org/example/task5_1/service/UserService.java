@@ -1,8 +1,8 @@
-package org.example.task4_1.service;
+package org.example.task5_1.service;
 
-import org.example.task4_1.dto.UserDTO;
-import org.example.task4_1.model.User;
-import org.example.task4_1.repository.UserRepository;
+import org.example.task5_1.dto.UserDTO;
+import org.example.task5_1.model.User;
+import org.example.task5_1.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,7 +1,7 @@
-package org.example.task4_1.controller;
+package org.example.task5_1.controller;
 
-import org.example.task4_1.dto.UserDTO;
-import org.example.task4_1.service.UserService;
+import org.example.task5_1.dto.UserDTO;
+import org.example.task5_1.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

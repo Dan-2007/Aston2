@@ -1,8 +1,8 @@
-package org.example.task4_1.service;
+package org.example.task5_1.service;
 
-import org.example.task4_1.dto.UserDTO;
-import org.example.task4_1.model.User;
-import org.example.task4_1.repository.UserRepository;
+import org.example.task5_1.dto.UserDTO;
+import org.example.task5_1.model.User;
+import org.example.task5_1.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

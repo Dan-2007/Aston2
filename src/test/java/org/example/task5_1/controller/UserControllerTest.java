@@ -1,9 +1,9 @@
-package org.example.task4_1.controller;
+package org.example.task5_1.controller;
 
-import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 import tools.jackson.databind.ObjectMapper;
-import org.example.task4_1.dto.UserDTO;
-import org.example.task4_1.service.UserService;
+import org.example.task5_1.dto.UserDTO;
+import org.example.task5_1.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(UserController.class)
-@Profile("test")
+@ActiveProfiles("test")
 class UserControllerTest {
 
     @Autowired
@@ -77,7 +77,7 @@ class UserControllerTest {
         UserDTO saved = new UserDTO(10L, "New", "new@example.com", 20, LocalDateTime.now());
         Mockito.when(userService.createUser(any(UserDTO.class))).thenReturn(saved);
 
-        mockMvc.perform(post("/api/users")
+        mockMvc.perform(post("/api/users/create_user")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(input)))
                 .andExpect(status().isCreated())
@@ -91,7 +91,7 @@ class UserControllerTest {
         UserDTO result = new UserDTO(1L, "Updated", "a@example.com", 30, LocalDateTime.now());
         Mockito.when(userService.updateUser(eq(1L), any(UserDTO.class))).thenReturn(Optional.of(result));
 
-        mockMvc.perform(put("/api/users/1")
+        mockMvc.perform(put("/api/users/update_user/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(update)))
                 .andExpect(status().isOk())
@@ -103,7 +103,7 @@ class UserControllerTest {
     void testDelete() throws Exception {
         Mockito.when(userService.deleteUser(1L)).thenReturn(true);
 
-        mockMvc.perform(delete("/api/users/1"))
+        mockMvc.perform(delete("/api/users/delete_user/1"))
                 .andExpect(status().isNoContent());
     }
 }

@@ -1,19 +1,31 @@
-package org.example.task4_1.dto;
+package org.example.task5_1.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-public class UserDTO {
+@Entity
+@Table(name = "users")
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
     private Integer age;
+
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    public UserDTO() {
+    public User() {
     }
 
-    public UserDTO(Long id, String name, String email, Integer age, LocalDateTime createdAt) {
-        this.id = id;
+    public User(String name, String email, Integer age, LocalDateTime createdAt) {
         this.name = name;
         this.email = email;
         this.age = age;
@@ -58,5 +70,16 @@ public class UserDTO {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", age=" + age +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }
