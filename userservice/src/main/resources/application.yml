@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: KafkaSpringBootTemplate
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        show_sql: true
+
+  kafka:
+    bootstrap-servers: localhost:9092,localhost:9094
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      properties:
+        "delivery.timeout.ms": 10000
+        "linger.ms": 0
+        "request.timeout.ms": 5000
+        "enable.idempotence": true
+        "max.in.flight.requests.per.connection": 5
+
+  output:
+    ansi:
+      enabled: always
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: info

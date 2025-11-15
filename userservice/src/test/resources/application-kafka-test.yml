@@ -1,0 +1,17 @@
+
+app:
+  kafka:
+    topics:
+      user-created: "user-created-events-topic"
+      user-deleted: "user-deleted-events-topic"
+    groups:
+      user-events: "user-events"
+
+spring:
+  kafka:
+    consumer:
+      group-id: ${app.kafka.groups.user-events}
+      properties:
+        spring.json.trusted.packages: "org.example.events"
+
+      auto-offset-reset: earliest
