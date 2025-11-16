@@ -1,0 +1,17 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: configservice
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/Dan-2007/astonconfig
+          clone-on-start: true
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://discoveryservice:8761/eureka/

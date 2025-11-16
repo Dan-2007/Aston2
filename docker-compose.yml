@@ -9,7 +9,13 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./volumes/postgres_data:/var/lib/postgresql
+      - ./volumes/new_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 
   server_1:
     image: apache/kafka
@@ -19,14 +25,20 @@ services:
       KAFKA_NODE_ID: 1
       KAFKA_KRAFT_CLUSTER_ID: Gi2W7ks4RzucJj4Kx5N99A
       KAFKA_PROCESS_ROLES: controller,broker
-      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@server_1:9091,2@server_2:9091,3@server_1:9091
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@server_1:9091,2@server_2:9091,3@server_3:9091
       KAFKA_LISTENERS: PLAINTEXT://:9090,CONTROLLER://:9091,EXTERNAL://:9092
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://server_1:9090,EXTERNAL://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://server_1:9090,EXTERNAL://server_1:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
     volumes:
-      - ./volumes/server_1:/tmp/kafka-logs
+      - ./volumes/server-1:/tmp/server_logs
+    healthcheck:
+      test: [ "CMD-SHELL", "netstat -ltn | grep :9090 || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
 
   server_2:
     image: apache/kafka
@@ -38,12 +50,18 @@ services:
       KAFKA_PROCESS_ROLES: controller,broker
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@server_1:9091,2@server_2:9091,3@server_3:9091
       KAFKA_LISTENERS: PLAINTEXT://:9090,CONTROLLER://:9091,EXTERNAL://:9094
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:9090,EXTERNAL://localhost:9094
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://server_2:9090,EXTERNAL://server_2:9094
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
     volumes:
-      - ./volumes/server_2:/tmp/kafka-logs
+      - ./volumes/server-2:/tmp/server_logs
+    healthcheck:
+      test: [ "CMD-SHELL", "netstat -ltn | grep :9090 || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
 
   server_3:
     image: apache/kafka
@@ -55,9 +73,78 @@ services:
       KAFKA_PROCESS_ROLES: controller,broker
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@server_1:9091,2@server_2:9091,3@server_3:9091
       KAFKA_LISTENERS: PLAINTEXT://:9090,CONTROLLER://:9091,EXTERNAL://:9096
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://server_3:9090,EXTERNAL://localhost:9096
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://server_3:9090,EXTERNAL://server_3:9096
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
     volumes:
-      - ./volumes/server_3:/tmp/kafka-logs
+      - ./volumes/server-3:/tmp/server_logs
+    healthcheck:
+      test: [ "CMD-SHELL", "netstat -ltn | grep :9090 || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+
+  configservice:
+    build:
+      context: ./configservice
+    ports:
+      - "8888:8888"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      postgres:
+        condition: service_healthy
+      server_1:
+        condition: service_healthy
+      server_2:
+        condition: service_healthy
+      server_3:
+        condition: service_healthy
+
+  discoveryservice:
+    build:
+      context: ./discoveryservice
+    ports:
+      - "8761:8761"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      configservice:
+        condition: service_started
+
+  gatewayservice:
+    build:
+      context: ./gatewayservice
+    ports:
+      - "8089:8089"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      discoveryservice:
+        condition: service_started
+
+  userservice:
+    build:
+      context: .
+      dockerfile: ./userservice/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      gatewayservice:
+        condition: service_started
+
+  emailnotificationservice:
+    build:
+      context: .
+      dockerfile: emailnotificationservice/Dockerfile
+    ports:
+      - "8090:8090"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      userservice:
+        condition: service_started

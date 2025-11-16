@@ -1,39 +1,13 @@
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-.kotlin
-
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-*.iws
-*.iml
-*.ipr
-
-### Eclipse ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
-.vscode/
-
-### Mac OS ###
-.DS_Store
+/.idea/
+/aston_yakkonen_homework_2.5_kafka.iml
+/volumes/server-1/
+/volumes/server-2/
+/volumes/server-3/
+/volumes/postgres_data/
+/core/target/
+/emailnotificationservice/target/
+/userservice/target/
+/volumes/new_postgres_data/
+/configservice/target/
+/discoveryservice/target/
+/gatewayservice/target/

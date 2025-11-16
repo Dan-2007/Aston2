@@ -48,10 +48,10 @@ class UserIntegrationTest {
     private KafkaTemplate<String, Object> kafkaTemplate;
 
     @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres")
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17")
             .withDatabaseName("testdb")
-            .withUsername("testuser")
-            .withPassword("testuser");
+            .withUsername("test")
+            .withPassword("test");
 
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {

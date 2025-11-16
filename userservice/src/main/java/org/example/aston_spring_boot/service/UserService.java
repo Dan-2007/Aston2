@@ -156,4 +156,13 @@ public class UserService {
             throw e;
         }
     }
+
+    public void existsByEmailOrThrowException(String email){
+        log.debug("Checking if user with email {} exists", email);
+        var userExists = userRepository.existsByEmail(email);
+        if(!userExists){
+            log.error("User with email {} does not exist", email);
+            throw new UserNotFoundException("User with email " + email + " does not exist");
+        }
+    }
 }

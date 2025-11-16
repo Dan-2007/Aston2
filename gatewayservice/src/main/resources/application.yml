@@ -1,0 +1,28 @@
+server:
+  port: 8089
+
+spring:
+  application:
+    name: gatewayservice
+  config:
+    import: optional:configserver:http://configservice:8888
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: userserviceroute
+              uri: lb://userservice
+              predicates:
+                - Path=/api/users/**
+            - id: emailnotificationserviceroute
+              uri: lb://emailnotificationservice
+              predicates:
+                - Path=/api/email/**
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://discoveryservice:8761/eureka/
+

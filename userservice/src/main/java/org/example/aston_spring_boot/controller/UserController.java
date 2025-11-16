@@ -18,10 +18,14 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.util.List;
 
 @Tag(name = "User management", description = "API for managing users")
 @Slf4j
@@ -143,6 +147,12 @@ public class UserController {
         log.info("PUT /api/users/{}", id);
         var userDTO = userService.updateUser(id, dto);
         return userDTOModelAssembler.toModel(userDTO);
+    }
+
+    @PostMapping("/checkemail")
+    public ResponseEntity<String> checkEmail(@RequestBody String email) {
+        userService.existsByEmailOrThrowException(email);
+        return ResponseEntity.ok(email);
     }
 
 }
