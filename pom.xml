@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>task6_1_microservices</artifactId>
+    <artifactId>task8_1_microservices</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
 
-    <name>Aston2_task6_1_microservices</name>
+    <name>Aston2_task8_1_microservices</name>
     <description>Aggregator POM for development convenience</description>
 
     <modules>
